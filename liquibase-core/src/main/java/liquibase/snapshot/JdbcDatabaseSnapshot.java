@@ -122,68 +122,68 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
 
                         String jdbcSchemaName = ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema);
 
-                         String sql =
-                         "SELECT  " + "  NULL AS pktable_cat,  " + "  p.owner as pktable_schem,  " + "  p.table_name as pktable_name,  " + "  pc.column_name as pkcolumn_name,  " +
-                         "  NULL as fktable_cat,  " + "  f.owner as fktable_schem,  " + "  f.table_name as fktable_name,  " + "  fc.column_name as fkcolumn_name,  " +
-                         "  fc.position as key_seq,  " + "  NULL as update_rule,  " + "  decode (f.delete_rule, 'CASCADE', 0, 'SET NULL', 2, 1) as delete_rule,  " +
-                         "  f.constraint_name as fk_name,  " + "  p.constraint_name as pk_name,  " +
-                         "  decode(f.deferrable, 'DEFERRABLE', 5, 'NOT DEFERRABLE', 7, 'DEFERRED', 6) deferrability  " +
-                         "FROM  " +
-                         "  all_cons_columns pc,  " +
-                         "  all_constraints p,  " +
-                         "  all_cons_columns fc,  " +
-                         "  all_constraints f  " +
-                         "WHERE 1 = 1  " +
-                         // "  AND p.table_name = '"+foundTable+"'  " +
-                         // "  AND f.table_name = :2  " +
-                         "  AND p.owner = '" +
-                         jdbcSchemaName +
-                         "'  " +
-                         // "  AND f.owner = '"+jdbcSchemaName+"'  " +
-                         "  AND f.constraint_type = 'R'  " + "  AND p.owner = f.r_owner  " + "  AND p.constraint_name = f.r_constraint_name  " + "  AND p.constraint_type in ('P', 'U')  " +
-                         "  AND pc.owner = p.owner  " + "  AND pc.constraint_name = p.constraint_name  " + "  AND pc.table_name = p.table_name  " + "  AND fc.owner = f.owner  " +
-                         "  AND fc.constraint_name = f.constraint_name  " + "  AND fc.table_name = f.table_name  " + "  AND fc.position = pc.position  " +
-                         "ORDER BY fktable_schem, fktable_name, key_seq";
+//                         String sql =
+//                         "SELECT  " + "  NULL AS pktable_cat,  " + "  p.owner as pktable_schem,  " + "  p.table_name as pktable_name,  " + "  pc.column_name as pkcolumn_name,  " +
+//                         "  NULL as fktable_cat,  " + "  f.owner as fktable_schem,  " + "  f.table_name as fktable_name,  " + "  fc.column_name as fkcolumn_name,  " +
+//                         "  fc.position as key_seq,  " + "  NULL as update_rule,  " + "  decode (f.delete_rule, 'CASCADE', 0, 'SET NULL', 2, 1) as delete_rule,  " +
+//                         "  f.constraint_name as fk_name,  " + "  p.constraint_name as pk_name,  " +
+//                         "  decode(f.deferrable, 'DEFERRABLE', 5, 'NOT DEFERRABLE', 7, 'DEFERRED', 6) deferrability  " +
+//                         "FROM  " +
+//                         "  all_cons_columns pc,  " +
+//                         "  all_constraints p,  " +
+//                         "  all_cons_columns fc,  " +
+//                         "  all_constraints f  " +
+//                         "WHERE 1 = 1  " +
+//                         // "  AND p.table_name = '"+foundTable+"'  " +
+//                         // "  AND f.table_name = :2  " +
+//                         "  AND p.owner = '" +
+//                         jdbcSchemaName +
+//                         "'  " +
+//                         // "  AND f.owner = '"+jdbcSchemaName+"'  " +
+//                         "  AND f.constraint_type = 'R'  " + "  AND p.owner = f.r_owner  " + "  AND p.constraint_name = f.r_constraint_name  " + "  AND p.constraint_type in ('P', 'U')  " +
+//                         "  AND pc.owner = p.owner  " + "  AND pc.constraint_name = p.constraint_name  " + "  AND pc.table_name = p.table_name  " + "  AND fc.owner = f.owner  " +
+//                         "  AND fc.constraint_name = f.constraint_name  " + "  AND fc.table_name = f.table_name  " + "  AND fc.position = pc.position  " +
+//                         "ORDER BY fktable_schem, fktable_name, key_seq";
                         // --#
                         // @author John Jonathan (aoshibr at gmail.com) in 20/06/2014
                         // --#
-                        StringBuilder sqlb = new StringBuilder();
-                        sqlb.append("SELECT NULL AS pktable_cat,  ");
-                        sqlb.append("  p.owner as pktable_schem,  ");
-                        sqlb.append("  p.table_name as pktable_name,  ");
-                        sqlb.append("  pc.column_name as pkcolumn_name,  ");
-                        sqlb.append("  NULL as fktable_cat,  ");
-                        sqlb.append("  f.owner as fktable_schem,  ");
-                        sqlb.append("  f.table_name as fktable_name,  ");
-                        sqlb.append("  fc.column_name as fkcolumn_name,  ");
-                        sqlb.append("  fc.position as key_seq,  ");
-                        sqlb.append("  NULL as update_rule,  ");
-                        sqlb.append("  decode (f.delete_rule, 'CASCADE', 0, 'SET NULL', 2, 1) as delete_rule,  ");
-                        sqlb.append("  f.constraint_name as fk_name,  " + "  p.constraint_name as pk_name,  ");
-                        sqlb.append("  decode(f.deferrable, 'DEFERRABLE', 5, 'NOT DEFERRABLE', 7, 'DEFERRED', 6) deferrability  ");
-                        sqlb.append("FROM  ");
-                        sqlb.append("  user_cons_columns pc,  ");
-                        sqlb.append("  user_constraints p,  ");
-                        sqlb.append("  user_cons_columns fc,  ");
-                        sqlb.append("  user_constraints f  ");
-                        sqlb.append("WHERE 1 = 1  ");
-                        sqlb.append("  AND p.owner = '");
-                        sqlb.append(jdbcSchemaName);
-                        sqlb.append("'  ");
-                        sqlb.append("  AND f.constraint_type = 'R'  ");
-                        sqlb.append("  AND p.owner = f.r_owner  ");
-                        sqlb.append("  AND p.constraint_name = f.r_constraint_name  ");
-                        sqlb.append("  AND p.constraint_type in ('P', 'U')  ");
-                        sqlb.append("  AND pc.owner = p.owner  ");
-                        sqlb.append("  AND pc.constraint_name = p.constraint_name  ");
-                        sqlb.append("  AND pc.table_name = p.table_name  ");
-                        sqlb.append("  AND fc.owner = f.owner  ");
-                        sqlb.append("  AND fc.constraint_name = f.constraint_name  ");
-                        sqlb.append("  AND fc.table_name = f.table_name  ");
-                        sqlb.append("  AND fc.position = pc.position  ");
-                        sqlb.append("ORDER BY fktable_schem, fktable_name, key_seq");
+                        StringBuilder sql = new StringBuilder();
+                        sql.append("SELECT NULL AS pktable_cat,  ");
+                        sql.append("  p.owner as pktable_schem,  ");
+                        sql.append("  p.table_name as pktable_name,  ");
+                        sql.append("  pc.column_name as pkcolumn_name,  ");
+                        sql.append("  NULL as fktable_cat,  ");
+                        sql.append("  f.owner as fktable_schem,  ");
+                        sql.append("  f.table_name as fktable_name,  ");
+                        sql.append("  fc.column_name as fkcolumn_name,  ");
+                        sql.append("  fc.position as key_seq,  ");
+                        sql.append("  NULL as update_rule,  ");
+                        sql.append("  decode (f.delete_rule, 'CASCADE', 0, 'SET NULL', 2, 1) as delete_rule,  ");
+                        sql.append("  f.constraint_name as fk_name,  " + "  p.constraint_name as pk_name,  ");
+                        sql.append("  decode(f.deferrable, 'DEFERRABLE', 5, 'NOT DEFERRABLE', 7, 'DEFERRED', 6) deferrability  ");
+                        sql.append("FROM  ");
+                        sql.append("  user_cons_columns pc,  ");
+                        sql.append("  user_constraints p,  ");
+                        sql.append("  user_cons_columns fc,  ");
+                        sql.append("  user_constraints f  ");
+                        sql.append("WHERE 1 = 1  ");
+                        sql.append("  AND p.owner = '");
+                        sql.append(jdbcSchemaName);
+                        sql.append("'  ");
+                        sql.append("  AND f.constraint_type = 'R'  ");
+                        sql.append("  AND p.owner = f.r_owner  ");
+                        sql.append("  AND p.constraint_name = f.r_constraint_name  ");
+                        sql.append("  AND p.constraint_type in ('P', 'U')  ");
+                        sql.append("  AND pc.owner = p.owner  ");
+                        sql.append("  AND pc.constraint_name = p.constraint_name  ");
+                        sql.append("  AND pc.table_name = p.table_name  ");
+                        sql.append("  AND fc.owner = f.owner  ");
+                        sql.append("  AND fc.constraint_name = f.constraint_name  ");
+                        sql.append("  AND fc.table_name = f.table_name  ");
+                        sql.append("  AND fc.position = pc.position  ");
+                        sql.append("ORDER BY fktable_schem, fktable_name, key_seq");
 
-                        return executeAndExtract(sqlb.toString(), database);
+                        return executeAndExtract(sql.toString(), database);
                     } else {
                         throw new RuntimeException("Cannot bulk select");
                     }
