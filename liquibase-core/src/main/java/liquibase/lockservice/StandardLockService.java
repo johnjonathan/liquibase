@@ -95,7 +95,7 @@ public class StandardLockService implements LockService {
             executor.comment("Create Database Lock Table");
             executor.execute(new CreateDatabaseChangeLogLockTableStatement());
             database.commit();
-            LogFactory.getLogger().debug("Created database lock table with name: " + database.escapeTableName(database.getLiquibaseCatalogName(), database.getLiquibaseSchemaName(), database.getDatabaseChangeLogLockTableName()));
+            LogFactory.getInstance().getLog().debug("Created database lock table with name: " + database.escapeTableName(database.getLiquibaseCatalogName(), database.getLiquibaseSchemaName(), database.getDatabaseChangeLogLockTableName()));
             this.hasDatabaseChangeLogLockTable = true;
             createdTable = true;
         }
@@ -160,7 +160,7 @@ public class StandardLockService implements LockService {
         while (!locked && new Date().getTime() < timeToGiveUp) {
             locked = acquireLock();
             if (!locked) {
-                LogFactory.getLogger().info("Waiting for changelog lock....");
+                LogFactory.getInstance().getLog().info("Waiting for changelog lock....");
                 try {
                     Thread.sleep(getChangeLogLockRecheckTime() * 1000);
                 } catch (InterruptedException e) {
@@ -211,7 +211,7 @@ public class StandardLockService implements LockService {
                     return false;
                 }
                 database.commit();
-                LogFactory.getLogger().info("Successfully acquired change log lock");
+                LogFactory.getInstance().getLog().info("Successfully acquired change log lock");
                 TimeElapsed.start();
 
                 hasChangeLogLock = true;
@@ -252,9 +252,9 @@ public class StandardLockService implements LockService {
                 hasChangeLogLock = false;
                 database.setCanCacheLiquibaseTableInfo(false);
 
-                LogFactory.getLogger().info("Successfully released change log lock");
+                LogFactory.getInstance().getLog().info("Successfully released change log lock");
                 executor.comment(TimeElapsed.getMessage());
-                LogFactory.getLogger().info(TimeElapsed.getMessage());
+                LogFactory.getInstance().getLog().info(TimeElapsed.getMessage());
                 database.rollback();
             } catch (DatabaseException e) {
                 ;
@@ -298,7 +298,7 @@ public class StandardLockService implements LockService {
             releaseLock();
         } catch (LockException e) {
             // ignore ?
-            LogFactory.getLogger().info("Ignored exception in forceReleaseLock: " + e.getMessage());
+            LogFactory.getInstance().getLog().info("Ignored exception in forceReleaseLock: " + e.getMessage());
         }*/
     }
 

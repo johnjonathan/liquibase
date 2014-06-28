@@ -127,7 +127,7 @@ public class CreateTableGenerator extends AbstractSqlGenerator<CreateTableStatem
 	                    }
                     }
                 } else {
-                    LogFactory.getLogger().warning(database.getShortName()+" does not support autoincrement columns as requested for "+(database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
+                    LogFactory.getInstance().getLog().warning(database.getShortName()+" does not support autoincrement columns as requested for "+(database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
                 }
             }
 
@@ -259,7 +259,7 @@ public class CreateTableGenerator extends AbstractSqlGenerator<CreateTableStatem
         String sql = buffer.toString().replaceFirst(",\\s*$", "")+")";
 
         if (database instanceof MySQLDatabase && mysqlTableOptionStartWith != null){
-        	LogFactory.getLogger().info("[MySQL] Using last startWith statement ("+mysqlTableOptionStartWith.toString()+") as table option.");
+        	LogFactory.getInstance().getLog().info("[MySQL] Using last startWith statement ("+mysqlTableOptionStartWith.toString()+") as table option.");
         	sql += " "+((MySQLDatabase)database).getTableOptionAutoIncrementStartWithClause(mysqlTableOptionStartWith);
         }
 

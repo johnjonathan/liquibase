@@ -18,7 +18,7 @@ import java.util.*;
 
 public class YamlChangeLogParser implements ChangeLogParser {
 
-    protected Logger log = LogFactory.getLogger();
+    protected Logger log = LogFactory.getInstance().getLog();
 
     @Override
     public boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {

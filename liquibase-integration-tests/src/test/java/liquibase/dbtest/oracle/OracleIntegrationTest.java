@@ -50,7 +50,7 @@ public class OracleIntegrationTest extends AbstractIntegrationTest {
 
         Statement queryIndex = ((JdbcConnection) this.getDatabase().getConnection()).getUnderlyingConnection().createStatement();
 
-        ResultSet indexOwner = queryIndex.executeQuery("SELECT owner FROM ALL_INDEXES WHERE index_name = 'IDX_BOOK_ID'");
+        ResultSet indexOwner = queryIndex.executeQuery("SELECT owner FROM USER_INDEXES WHERE index_name = 'IDX_BOOK_ID'");
 
         assertTrue(indexOwner.next());
 
@@ -89,7 +89,7 @@ public class OracleIntegrationTest extends AbstractIntegrationTest {
 
         Statement queryIndex = ((JdbcConnection) this.getDatabase().getConnection()).getUnderlyingConnection().createStatement();
 
-        ResultSet indexOwner = queryIndex.executeQuery("SELECT owner FROM ALL_VIEWS WHERE view_name = 'V_BOOK2'");
+        ResultSet indexOwner = queryIndex.executeQuery("SELECT owner FROM USER_VIEWS WHERE view_name = 'V_BOOK2'");
 
         assertTrue(indexOwner.next());
 

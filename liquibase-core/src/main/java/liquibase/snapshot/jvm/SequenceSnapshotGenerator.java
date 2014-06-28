@@ -1,24 +1,29 @@
 package liquibase.snapshot.jvm;
 
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
+
 import liquibase.CatalogAndSchema;
 import liquibase.database.Database;
-import liquibase.database.core.*;
+import liquibase.database.core.DB2Database;
+import liquibase.database.core.DerbyDatabase;
+import liquibase.database.core.FirebirdDatabase;
+import liquibase.database.core.H2Database;
+import liquibase.database.core.HsqlDatabase;
+import liquibase.database.core.InformixDatabase;
+import liquibase.database.core.MSSQLDatabase;
+import liquibase.database.core.OracleDatabase;
+import liquibase.database.core.PostgresDatabase;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.UnexpectedLiquibaseException;
 import liquibase.executor.ExecutorService;
-import liquibase.snapshot.InvalidExampleException;
-import liquibase.snapshot.SnapshotGeneratorChain;
 import liquibase.snapshot.DatabaseSnapshot;
+import liquibase.snapshot.InvalidExampleException;
 import liquibase.statement.core.RawSqlStatement;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Schema;
 import liquibase.structure.core.Sequence;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SequenceSnapshotGenerator extends JdbcSnapshotGenerator {
 
@@ -135,7 +140,7 @@ public class SequenceSnapshotGenerator extends JdbcSnapshotGenerator {
         } else if (database instanceof InformixDatabase) {
             return "SELECT tabname AS SEQUENCE_NAME FROM systables t, syssequences s WHERE s.tabid = t.tabid AND t.owner = '" + schema.getName() + "'";
         } else if (database instanceof OracleDatabase) {
-            return "SELECT SEQUENCE_NAME AS SEQUENCE_NAME, MIN_VALUE, MAX_VALUE, INCREMENT_BY, CYCLE_FLAG AS WILL_CYCLE, ORDER_FLAG AS IS_ORDERED, LAST_NUMBER as START_VALUE, CACHE_SIZE FROM ALL_SEQUENCES WHERE SEQUENCE_OWNER = '" + schema.getCatalogName() + "'";
+            return "SELECT SEQUENCE_NAME AS SEQUENCE_NAME, MIN_VALUE, MAX_VALUE, INCREMENT_BY, CYCLE_FLAG AS WILL_CYCLE, ORDER_FLAG AS IS_ORDERED, LAST_NUMBER as START_VALUE, CACHE_SIZE FROM USER_SEQUENCES";
         } else if (database instanceof PostgresDatabase) {
             return "SELECT relname AS SEQUENCE_NAME FROM pg_class, pg_namespace " +
                     "WHERE relkind='S' " +
@@ -158,27 +163,5 @@ public class SequenceSnapshotGenerator extends JdbcSnapshotGenerator {
         }
 
     }
-
-    //from SQLiteDatbaseSnapshotGenerator
-    //    protected void readSequences(DatabaseSnapshot snapshot, String schema, DatabaseMetaData databaseMetaData) throws DatabaseException {
-//        Database database = snapshot.getDatabase();
-//        updateListeners("Reading sequences for " + database.toString() + " ...");
-//
-//        String convertedSchemaName = database.convertRequestedSchemaToSchema(schema);
-//
-//        if (database.supportsSequences()) {
-//            //noinspection unchecked
-//            List<String> sequenceNamess = (List<String>) ExecutorService.getInstance().getExecutor(database).queryForList(new SelectSequencesStatement(schema), String.class);
-//
-//
-//            for (String sequenceName : sequenceNamess) {
-//                Sequence seq = new Sequence();
-//                seq.setName(sequenceName.trim());
-//                seq.setName(convertedSchemaName);
-//
-//                snapshot.getSequences().add(seq);
-//            }
-//        }
-//    }
 
 }

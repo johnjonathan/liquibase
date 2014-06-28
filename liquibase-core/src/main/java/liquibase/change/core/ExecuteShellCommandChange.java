@@ -94,7 +94,7 @@ public class ExecuteShellCommandChange extends AbstractChange {
             String currentOS = System.getProperty("os.name");
             if (!os.contains(currentOS)) {
                 shouldRun = false;
-                LogFactory.getLogger().info("Not executing on os "+currentOS+" when "+os+" was specified");
+                LogFactory.getInstance().getLog().info("Not executing on os "+currentOS+" when "+os+" was specified");
             }
         }
 
@@ -132,8 +132,8 @@ public class ExecuteShellCommandChange extends AbstractChange {
                         StreamUtil.copy(p.getErrorStream(), errorStream);
                         StreamUtil.copy(p.getInputStream(), inputStream);
 
-                        LogFactory.getLogger().severe(errorStream.toString());
-                        LogFactory.getLogger().info(inputStream.toString());
+                        LogFactory.getInstance().getLog().severe(errorStream.toString());
+                        LogFactory.getInstance().getLog().info(inputStream.toString());
 
                         if (returnCode != 0) {
                             throw new RuntimeException(getCommandString() + " returned an code of " + returnCode);

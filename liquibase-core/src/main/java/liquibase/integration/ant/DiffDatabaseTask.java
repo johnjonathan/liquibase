@@ -173,7 +173,7 @@ public class DiffDatabaseTask extends BaseLiquibaseTask {
                     try {
                         referenceDatabase.close();
                     } catch (DatabaseException e) {
-                        LogFactory.getLogger().severe("Error closing referenceDatabase", e);
+                        LogFactory.getInstance().getLog().severe("Error closing referenceDatabase", e);
                     }
                 }
             }

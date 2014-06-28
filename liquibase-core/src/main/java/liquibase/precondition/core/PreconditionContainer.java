@@ -212,7 +212,7 @@ public class PreconditionContainer extends AndPrecondition {
                 message = new StringBuffer(getOnFailMessage());
             }
             if (this.getOnFail().equals(PreconditionContainer.FailOption.WARN)) {
-                LogFactory.getLogger().info("Executing: " + ranOn + " despite precondition failure due to onFail='WARN':\n " + message);
+                LogFactory.getInstance().getLog().info("Executing: " + ranOn + " despite precondition failure due to onFail='WARN':\n " + message);
             } else {
                 if (getOnFailMessage() == null) {
                     throw e;
@@ -229,10 +229,10 @@ public class PreconditionContainer extends AndPrecondition {
             }
 
             if (this.getOnError().equals(PreconditionContainer.ErrorOption.CONTINUE)) {
-                LogFactory.getLogger().info("Continuing past: " + toString() + " despite precondition error:\n " + message);
+                LogFactory.getInstance().getLog().info("Continuing past: " + toString() + " despite precondition error:\n " + message);
                 throw e;
             } else if (this.getOnError().equals(PreconditionContainer.ErrorOption.WARN)) {
-                LogFactory.getLogger().warning("Continuing past: " + toString() + " despite precondition error:\n " + message);
+                LogFactory.getInstance().getLog().warning("Continuing past: " + toString() + " despite precondition error:\n " + message);
             } else {
                 if (getOnErrorMessage() == null) {
                     throw e;

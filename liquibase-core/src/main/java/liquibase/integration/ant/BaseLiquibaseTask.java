@@ -321,7 +321,7 @@ public abstract class BaseLiquibaseTask extends Task {
         }
 
         protected void registerHandler(Handler theHandler) {
-            Logger logger = LogFactory.getLogger();
+            Logger logger = LogFactory.getInstance().getLog();
         }
 
 
@@ -440,11 +440,11 @@ public abstract class BaseLiquibaseTask extends Task {
     }
 
     public String getLogLevel() {
-        return LogFactory.getLogger().getLogLevel().name();
+        return LogFactory.getInstance().getLog().getLogLevel().name();
     }
 
     public void setLogLevel(String level) {
-        LogFactory.getLogger().setLogLevel(level);
+        LogFactory.getInstance().getLog().setLogLevel(level);
     }
 
     public static class ChangeLogProperty {

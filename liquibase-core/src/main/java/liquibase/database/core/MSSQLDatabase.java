@@ -176,7 +176,7 @@ public class MSSQLDatabase extends AbstractJdbcDatabase {
         try {
             return ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("select schema_name()"), String.class);
         } catch (Exception e) {
-            LogFactory.getLogger().info("Error getting default schema", e);
+            LogFactory.getInstance().getLog().info("Error getting default schema", e);
         }
         return null;
     }
@@ -349,7 +349,7 @@ public class MSSQLDatabase extends AbstractJdbcDatabase {
                     caseSensitive = ! collation.contains("_CI_");
                 }
             } catch (Exception e) {
-                LogFactory.getLogger().warning("Cannot determine case sensitivity from MSSQL", e);
+                LogFactory.getInstance().getLog().warning("Cannot determine case sensitivity from MSSQL", e);
             }
         }
 

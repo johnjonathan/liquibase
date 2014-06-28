@@ -186,7 +186,7 @@ public class ChangeSet implements Conditional, LiquibaseSerializable {
 
     public ChangeSet(DatabaseChangeLog databaseChangeLog) {
         this.changes = new ArrayList<Change>();
-        log = LogFactory.getLogger();
+        log = LogFactory.getInstance().getLog();
         this.changeLog = databaseChangeLog;
     }
 
@@ -470,7 +470,7 @@ public class ChangeSet implements Conditional, LiquibaseSerializable {
                     skipChange = true;
                     execType = ExecType.SKIPPED;
 
-                    LogFactory.getLogger().info("Continuing past: " + toString() + " despite precondition failure due to onFail='CONTINUE': " + message);
+                    LogFactory.getInstance().getLog().info("Continuing past: " + toString() + " despite precondition failure due to onFail='CONTINUE': " + message);
                 } else if (preconditions.getOnFail().equals(PreconditionContainer.FailOption.MARK_RAN)) {
                     execType = ExecType.MARK_RAN;
                     skipChange = true;

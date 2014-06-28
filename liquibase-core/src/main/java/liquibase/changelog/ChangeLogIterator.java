@@ -39,7 +39,7 @@ public class ChangeLogIterator {
     }
 
     public void run(ChangeSetVisitor visitor, RuntimeEnvironment env) throws LiquibaseException {
-      Logger log = LogFactory.getLogger();
+      Logger log = LogFactory.getInstance().getLog();
       databaseChangeLog.setRuntimeEnvironment(env);
       log.setChangeLog(databaseChangeLog);
         try {

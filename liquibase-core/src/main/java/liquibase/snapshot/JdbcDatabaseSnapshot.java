@@ -122,29 +122,6 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
 
                         String jdbcSchemaName = ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema);
 
-//                         String sql =
-//                         "SELECT  " + "  NULL AS pktable_cat,  " + "  p.owner as pktable_schem,  " + "  p.table_name as pktable_name,  " + "  pc.column_name as pkcolumn_name,  " +
-//                         "  NULL as fktable_cat,  " + "  f.owner as fktable_schem,  " + "  f.table_name as fktable_name,  " + "  fc.column_name as fkcolumn_name,  " +
-//                         "  fc.position as key_seq,  " + "  NULL as update_rule,  " + "  decode (f.delete_rule, 'CASCADE', 0, 'SET NULL', 2, 1) as delete_rule,  " +
-//                         "  f.constraint_name as fk_name,  " + "  p.constraint_name as pk_name,  " +
-//                         "  decode(f.deferrable, 'DEFERRABLE', 5, 'NOT DEFERRABLE', 7, 'DEFERRED', 6) deferrability  " +
-//                         "FROM  " +
-//                         "  all_cons_columns pc,  " +
-//                         "  all_constraints p,  " +
-//                         "  all_cons_columns fc,  " +
-//                         "  all_constraints f  " +
-//                         "WHERE 1 = 1  " +
-//                         // "  AND p.table_name = '"+foundTable+"'  " +
-//                         // "  AND f.table_name = :2  " +
-//                         "  AND p.owner = '" +
-//                         jdbcSchemaName +
-//                         "'  " +
-//                         // "  AND f.owner = '"+jdbcSchemaName+"'  " +
-//                         "  AND f.constraint_type = 'R'  " + "  AND p.owner = f.r_owner  " + "  AND p.constraint_name = f.r_constraint_name  " + "  AND p.constraint_type in ('P', 'U')  " +
-//                         "  AND pc.owner = p.owner  " + "  AND pc.constraint_name = p.constraint_name  " + "  AND pc.table_name = p.table_name  " + "  AND fc.owner = f.owner  " +
-//                         "  AND fc.constraint_name = f.constraint_name  " + "  AND fc.table_name = f.table_name  " + "  AND fc.position = pc.position  " +
-//                         "ORDER BY fktable_schem, fktable_name, key_seq";
-                        // --#
                         // @author John Jonathan (aoshibr at gmail.com) in 20/06/2014
                         // --#
                         StringBuilder sql = new StringBuilder();
@@ -222,41 +199,6 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
 
                     CatalogAndSchema catalogAndSchema = new CatalogAndSchema(catalogName, schemaName).customize(database);
                     if (database instanceof OracleDatabase) {
-                        // oracle getIndexInfo is buggy and slow. See Issue 1824548 and http://forums.oracle.com/forums/thread.jspa?messageID=578383&#578383
-                        // String sql =
-                        // "SELECT c.INDEX_NAME, 3 AS TYPE, c.TABLE_NAME, c.COLUMN_NAME, c.COLUMN_POSITION AS ORDINAL_POSITION, e.COLUMN_EXPRESSION AS FILTER_CONDITION, case I.UNIQUENESS when 'UNIQUE' then 0 else 1 end as NON_UNIQUE "
-                        // +
-                        // "FROM ALL_IND_COLUMNS c " +
-                        // "JOIN ALL_INDEXES i on i.index_name = c.index_name " +
-                        // "LEFT JOIN all_ind_expressions e on (e.column_position = c.column_position AND e.index_name = c.index_name) " +
-                        // "WHERE c.TABLE_OWNER='" +
-                        // database.correctObjectName(catalogAndSchema.getCatalogName(), Schema.class) + "'";
-                        // if (!bulkFetch && tableName != null) {
-                        // sql += " AND c.TABLE_NAME='" + database.correctObjectName(tableName, Table.class) + "'";
-                        // }
-                        //
-                        // if (!bulkFetch && indexName != null) {
-                        // sql += " AND c.INDEX_NAME='" + database.correctObjectName(indexName, Index.class) + "'";
-                        // }
-                        //
-                        // sql += " ORDER BY c.INDEX_NAME, ORDINAL_POSITION";
-                        //
-                        // returnList.addAll(executeAndExtract(sql, database));
-                        // } else {
-                        // List<String> tables = new ArrayList<String>();
-                        // if (tableName == null) {
-                        // for (CachedRow row : getTables(((AbstractJdbcDatabase) database).getJdbcCatalogName(catalogAndSchema),
-                        // ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), null, new String[] { "TABLE" })) {
-                        // tables.add(row.getString("TABLE_NAME"));
-                        // }
-                        // } else {
-                        // tables.add(tableName);
-                        // }
-                        //
-                        // for (String tableName : tables) {
-                        // returnList.addAll(extract(databaseMetaData.getIndexInfo(((AbstractJdbcDatabase) database).getJdbcCatalogName(catalogAndSchema),
-                        // ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), tableName, false, true)));
-                        // }
                         // --#
                         // @author John Jonthan (aoshibr at gmail.com) 20/06/2014
                         // --#
@@ -271,19 +213,17 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                         sql.append("then 0 ");
                         sql.append("else 1 ");
                         sql.append("end as NON_UNIQUE ");
-                        sql.append("FROM ALL_IND_COLUMNS c ");
-                        sql.append("JOIN ALL_INDEXES i on i.index_name = c.index_name ");
-                        sql.append("LEFT JOIN all_ind_expressions e on (e.column_position = c.column_position AND e.index_name = c.index_name) ");
-                        sql.append("WHERE c.TABLE_OWNER='");
-                        sql.append(database.correctObjectName(catalogAndSchema.getCatalogName(), Schema.class));
-                        sql.append("' ");
+                        sql.append("FROM USER_IND_COLUMNS c ");
+                        sql.append("JOIN USER_INDEXES i on i.index_name = c.index_name ");
+                        sql.append("LEFT JOIN user_ind_expressions e on (e.column_position = c.column_position AND e.index_name = c.index_name) ");
+                        sql.append("WHERE 1=1 ");
                         if (!bulkFetch && tableName != null) {
-                            sql.append(" AND c.TABLE_NAME='");
+                            sql.append("AND c.TABLE_NAME='");
                             sql.append(database.correctObjectName(tableName, Table.class));
                             sql.append("' ");
                         }
                         if (!bulkFetch && indexName != null) {
-                            sql.append(" AND c.INDEX_NAME='");
+                            sql.append("AND c.INDEX_NAME='");
                             sql.append(database.correctObjectName(indexName, Index.class));
                             sql.append("'");
                         }
@@ -309,6 +249,13 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                     }
 
                     return returnList;
+                }
+                
+                private void appendWhereClause(String... arg){
+                    StringBuilder sql = new StringBuilder();
+                    if (org.apache.commons.lang.StringUtils.isBlank(sql.toString())){
+                        
+                    }
                 }
 
                 @Override
@@ -404,26 +351,6 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                 }
 
                 protected List<CachedRow> oracleQuery(boolean bulk) throws DatabaseException, SQLException {
-                    CatalogAndSchema catalogAndSchema = new CatalogAndSchema(catalogName, schemaName).customize(database);
-
-                    // String sql =
-                    // "select NULL AS TABLE_CAT, ALL_TAB_COLUMNS.OWNER AS TABLE_SCHEM, 'NO' as IS_AUTOINCREMENT, ALL_COL_COMMENTS.COMMENTS AS REMARKS, ALL_TAB_COLUMNS.* FROM ALL_TAB_COLUMNS, ALL_COL_COMMENTS "
-                    // +
-                    // "WHERE ALL_COL_COMMENTS.OWNER=ALL_TAB_COLUMNS.OWNER " +
-                    // "AND ALL_COL_COMMENTS.TABLE_NAME=ALL_TAB_COLUMNS.TABLE_NAME " +
-                    // "AND ALL_COL_COMMENTS.COLUMN_NAME=ALL_TAB_COLUMNS.COLUMN_NAME " +
-                    // "AND ALL_TAB_COLUMNS.OWNER='" +
-                    // ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema) +
-                    // "'";
-                    // if (!bulk) {
-                    // if (tableName != null) {
-                    // sql += " AND ALL_TAB_COLUMNS.TABLE_NAME='" + database.escapeObjectName(tableName, Table.class) + "'";
-                    // }
-                    // if (columnName != null) {
-                    // sql += " AND ALL_TAB_COLUMNS.COLUMN_NAME='" + database.escapeObjectName(columnName, Column.class) + "'";
-                    // }
-                    // }
-
                     // --#
                     // @author John Jonathan (aoshibr at gmail.com) in 20/06/2014
                     // --#
@@ -503,30 +430,6 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                 private List<CachedRow> queryOracle(CatalogAndSchema catalogAndSchema,
                     String tableName) throws DatabaseException, SQLException {
                     List<CachedRow> results = new ArrayList<CachedRow>();
-                    // for (String type : types) {
-                    // String allTable;
-                    // String nameColumn;
-                    // if (type.equalsIgnoreCase("table")) {
-                    // allTable = "ALL_TABLES";
-                    // nameColumn = "TABLE_NAME";
-                    // } else if (type.equalsIgnoreCase("view")) {
-                    // allTable = "ALL_VIEWS";
-                    // nameColumn = "VIEW_NAME";
-                    // } else {
-                    // throw new UnexpectedLiquibaseException("Unknown table type: "+type);
-                    // }
-                    //
-                    // String ownerName = database.correctObjectName(catalogAndSchema.getCatalogName(), Schema.class);
-                    // String sql = "SELECT null as TABLE_CAT, a.OWNER as TABLE_SCHEM, a."+nameColumn+" as TABLE_NAME, 'TABLE' as TABLE_TYPE,  c.COMMENTS as REMARKS " +
-                    // "from "+allTable+" a " +
-                    // "join ALL_TAB_COMMENTS c on a."+nameColumn+"=c.table_name and a.owner=c.owner " +
-                    // "WHERE a.OWNER='" + ownerName + "'";
-                    // if (tableName != null) {
-                    // sql += " AND "+nameColumn+"='" + database.correctObjectName(tableName, Table.class) + "'";
-                    // }
-                    // //sql += " AND a."+nameColumn+" not in (select mv.name from all_registered_mviews mv where mv.owner='"+ownerName+"')";
-                    // results.addAll(executeAndExtract(sql, database));
-                    // }
 
                     // --#
                     // @author John Jonathan (aoshibr at gmail.com) in 20/06/2014
@@ -673,12 +576,6 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                             sql += " and TABLE_NAME='" + database.correctObjectName(tableName, Table.class) + "'";
                         }
                     } else if (database instanceof OracleDatabase) {
-                        // sql =
-                        // "select uc.constraint_name, uc.table_name,uc.status,uc.deferrable,uc.deferred,ui.tablespace_name from all_constraints uc, all_indexes ui " +
-                        // "where uc.constraint_type='U' and uc.index_name = ui.index_name " + "and uc.owner = '" + jdbcSchemaName + "' " + "and ui.table_owner = '" + jdbcSchemaName + "' ";
-                        // if (tableName != null) {
-                        // sql += " and uc.table_name = '" + database.correctObjectName(tableName, Table.class) + "'";
-                        // }
                         // --#
                         // @author John Jonathan (aoshibr at gmail.com) in 20/06/2014
                         sql =
@@ -718,7 +615,7 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                             sql += " AND systables.tabname = '" + database.correctObjectName(tableName, Table.class) + "'";
                         }
                     } else if (database instanceof SybaseDatabase) {
-                        LogFactory.getLogger().warning("Finding unique constraints not currently supported for Sybase");
+                        LogFactory.getInstance().getLog().warning("Finding unique constraints not currently supported for Sybase");
                         return null; // TODO: find sybase sql
                     } else {
                         sql =

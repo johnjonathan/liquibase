@@ -71,12 +71,12 @@ public class DiffToChangeLog {
     public void print(String changeLogFile, ChangeLogSerializer changeLogSerializer) throws ParserConfigurationException, IOException, DatabaseException {
         File file = new File(changeLogFile);
         if (!file.exists()) {
-            LogFactory.getLogger().info(file + " does not exist, creating");
+            LogFactory.getInstance().getLog().info(file + " does not exist, creating");
             FileOutputStream stream = new FileOutputStream(file);
             print(new PrintStream(stream), changeLogSerializer);
             stream.close();
         } else {
-            LogFactory.getLogger().info(file + " exists, appending");
+            LogFactory.getInstance().getLog().info(file + " exists, appending");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             print(new PrintStream(out), changeLogSerializer);
 
@@ -85,7 +85,7 @@ public class DiffToChangeLog {
             xml = xml.replaceFirst("</databaseChangeLog>", "");
             xml = xml.trim();
             if ("".equals(xml)) {
-                LogFactory.getLogger().info("No changes found, nothing to do");
+                LogFactory.getInstance().getLog().info("No changes found, nothing to do");
                 return;
             }
 
@@ -191,7 +191,7 @@ public class DiffToChangeLog {
             for (Class<? extends DatabaseObject> type : types) {
                 log += "    " + type.getName();
             }
-            LogFactory.getLogger().debug(log);
+            LogFactory.getInstance().getLog().debug(log);
             loggedOrderFor.add(generatorType);
         }
 

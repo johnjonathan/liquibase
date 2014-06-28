@@ -230,7 +230,7 @@ public class SybaseDatabase extends AbstractJdbcDatabase {
         try {
             return ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("select user_name()"), String.class);
         } catch (Exception e) {
-            LogFactory.getLogger().info("Error getting default schema", e);
+            LogFactory.getInstance().getLog().info("Error getting default schema", e);
         }
         return null;
     }
@@ -264,7 +264,7 @@ public class SybaseDatabase extends AbstractJdbcDatabase {
         try {
             return getConnection().getDatabaseMajorVersion();
         } catch (UnsupportedOperationException e) {
-        	LogFactory.getLogger()
+        	LogFactory.getInstance().getLog()
         		.warning("Your JDBC driver does not support getDatabaseMajorVersion(). Consider upgrading it.");
             return -1;
         }
@@ -279,7 +279,7 @@ public class SybaseDatabase extends AbstractJdbcDatabase {
         try {
             return getConnection().getDatabaseMinorVersion();
         } catch (UnsupportedOperationException e) {
-        	LogFactory.getLogger()
+        	LogFactory.getInstance().getLog()
     			.warning("Your JDBC driver does not support getDatabaseMajorVersion(). Consider upgrading it.");
             return -1;
         }

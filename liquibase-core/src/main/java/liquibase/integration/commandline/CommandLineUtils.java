@@ -145,7 +145,7 @@ public class CommandLineUtils {
 
         @Override
         public void statusUpdate(String message) {
-            LogFactory.getLogger().info(message);
+            LogFactory.getInstance().getLog().info(message);
 
         }
 

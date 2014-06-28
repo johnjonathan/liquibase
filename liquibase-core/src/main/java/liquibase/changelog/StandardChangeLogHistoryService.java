@@ -164,7 +164,7 @@ public class StandardChangeLogHistoryService extends AbstractChangeLogHistorySer
             }
             // If there is no table in the database for recording change history create one.
             statementsToExecute.add(createTableStatement);
-            LogFactory.getLogger().info("Creating database history table with name: " + getDatabase().escapeTableName(getLiquibaseCatalogName(), getLiquibaseSchemaName(), getDatabaseChangeLogTableName()));
+            LogFactory.getInstance().getLog().info("Creating database history table with name: " + getDatabase().escapeTableName(getLiquibaseCatalogName(), getLiquibaseSchemaName(), getDatabaseChangeLogTableName()));
 //                }
         }
 
@@ -173,7 +173,7 @@ public class StandardChangeLogHistoryService extends AbstractChangeLogHistorySer
                 executor.execute(sql);
                 getDatabase().commit();
             } else {
-                LogFactory.getLogger().info("Cannot run "+sql.getClass().getSimpleName()+" on "+getDatabase().getShortName()+" when checking databasechangelog table");
+                LogFactory.getInstance().getLog().info("Cannot run "+sql.getClass().getSimpleName()+" on "+getDatabase().getShortName()+" when checking databasechangelog table");
             }
         }
 
@@ -193,7 +193,7 @@ public class StandardChangeLogHistoryService extends AbstractChangeLogHistorySer
             String databaseChangeLogTableName = getDatabase().escapeTableName(getLiquibaseCatalogName(), getLiquibaseSchemaName(), getDatabaseChangeLogTableName());
             List<RanChangeSet> ranChangeSetList = new ArrayList<RanChangeSet>();
             if (hasDatabaseChangeLogTable()) {
-                LogFactory.getLogger().info("Reading from " + databaseChangeLogTableName);
+                LogFactory.getInstance().getLog().info("Reading from " + databaseChangeLogTableName);
                 List<Map<String, ?>> results = queryDatabaseChangeLogTable(database);
                 for (Map rs : results) {
                     String fileName = rs.get("FILENAME").toString();
@@ -219,7 +219,7 @@ public class StandardChangeLogHistoryService extends AbstractChangeLogHistorySer
                         RanChangeSet ranChangeSet = new RanChangeSet(fileName, id, author, CheckSum.parse(md5sum), dateExecuted, tag, ChangeSet.ExecType.valueOf(execType), description, comments);
                         ranChangeSetList.add(ranChangeSet);
                     } catch (IllegalArgumentException e) {
-                        LogFactory.getLogger().severe("Unknown EXECTYPE from database: " + execType);
+                        LogFactory.getInstance().getLog().severe("Unknown EXECTYPE from database: " + execType);
                         throw e;
                     }
                 }
