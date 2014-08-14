@@ -52,6 +52,7 @@ public abstract class BaseLiquibaseTask extends Task {
     private String databaseClass;
     private String databaseChangeLogTableName;
     private String databaseChangeLogLockTableName;
+    private String schemaDiffControlTableName;
     private String databaseChangeLogObjectsTablespace;
     private boolean outputDefaultSchema = true; // Default based on setting in AbstractJdbcDatabase
     private boolean outputDefaultCatalog = true;
@@ -276,6 +277,9 @@ public abstract class BaseLiquibaseTask extends Task {
 
         if (getDatabaseChangeLogLockTableName() != null)
             database.setDatabaseChangeLogLockTableName(getDatabaseChangeLogLockTableName());
+        
+        if (getSchemaDiffControlTableName() != null)
+            database.setSchemaDiffControlTableName(getSchemaDiffControlTableName());
 
         if (getDatabaseChangeLogObjectsTablespace() != null)
             database.setLiquibaseTablespaceName(getDatabaseChangeLogObjectsTablespace());
@@ -402,6 +406,14 @@ public abstract class BaseLiquibaseTask extends Task {
 
     public void setDatabaseChangeLogLockTableName(String tableName) {
         this.databaseChangeLogLockTableName = tableName;
+    }
+    
+    public String getSchemaDiffControlTableName() {
+        return schemaDiffControlTableName;
+    }
+    
+    public void setSchemaDiffControlTableName(String schemaDiffControlTableName) {
+        this.schemaDiffControlTableName = schemaDiffControlTableName;
     }
 
     public String getDatabaseChangeLogObjectsTablespace() {

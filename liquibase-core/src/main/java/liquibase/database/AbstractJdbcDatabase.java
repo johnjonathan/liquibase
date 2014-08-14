@@ -79,6 +79,7 @@ public abstract class AbstractJdbcDatabase implements Database {
 
     private String databaseChangeLogTableName;
     private String databaseChangeLogLockTableName;
+    private String schemaDiffControlTableName;
     private String liquibaseTablespaceName;
     private String liquibaseSchemaName;
     private String liquibaseCatalogName;
@@ -568,6 +569,18 @@ public abstract class AbstractJdbcDatabase implements Database {
 
         return LiquibaseConfiguration.getInstance().getConfiguration(GlobalConfiguration.class).getDatabaseChangeLogTableName();
     }
+    
+    /* (non-Javadoc)
+     * @see liquibase.database.Database#getSchemaDiffControlTableName()
+     */
+    @Override
+    public String getSchemaDiffControlTableName() {
+        if (schemaDiffControlTableName != null) {
+            return schemaDiffControlTableName;
+        }
+        
+        return LiquibaseConfiguration.getInstance().getConfiguration(GlobalConfiguration.class).getSchemDiffControlTableName();
+    }
 
     /**
      * @see liquibase.database.Database#getDatabaseChangeLogLockTableName()
@@ -607,6 +620,14 @@ public abstract class AbstractJdbcDatabase implements Database {
     @Override
     public void setDatabaseChangeLogLockTableName(final String tableName) {
         this.databaseChangeLogLockTableName = tableName;
+    }
+
+    /* (non-Javadoc)
+     * @see liquibase.database.Database#setSchemaDiffControlTableName(java.lang.String)
+     */
+    @Override
+    public void setSchemaDiffControlTableName(String tableName) {
+        this.schemaDiffControlTableName = tableName;
     }
 
     /**

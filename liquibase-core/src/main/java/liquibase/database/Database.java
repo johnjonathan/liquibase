@@ -23,6 +23,7 @@ public interface Database extends PrioritizedService {
 
     String databaseChangeLogTableName = "DatabaseChangeLog".toUpperCase();
     String databaseChangeLogLockTableName = "DatabaseChangeLogLock".toUpperCase();
+    String schemaDiffControlTableName = "schemaDiffControl".toUpperCase();
 
     /**
      * Is this AbstractDatabase subclass the correct one to use for the given connection.
@@ -113,6 +114,8 @@ public interface Database extends PrioritizedService {
     String getDatabaseChangeLogTableName();
 
     String getDatabaseChangeLogLockTableName();
+    
+    String getSchemaDiffControlTableName();
 
     String getLiquibaseTablespaceName();
 
@@ -131,6 +134,12 @@ public interface Database extends PrioritizedService {
      * @param tableName
      */
     public void setDatabaseChangeLogLockTableName(String tableName);
+    /**
+     * Set the table name of the schema diff control to the given table name
+     *
+     * @param tableName
+     */
+    public void setSchemaDiffControlTableName(String tableName);
 
     /**
      * Returns SQL to concat the passed values.

@@ -125,6 +125,7 @@ public class ServiceLocator {
                 addPackageToScan("liquibase.lockservice");
                 addPackageToScan("liquibase.sdk");
                 addPackageToScan("liquibase.ext");
+                addPackageToScan("liquibase.schemadiff");
             }
         }
     }
@@ -169,7 +170,6 @@ public class ServiceLocator {
 
     public <T> Class<? extends T>[] findClasses(Class<T> requiredInterface) throws ServiceNotFoundException {
         logger.debug("ServiceLocator.findClasses for "+requiredInterface.getName());
-
             try {
                 Class.forName(requiredInterface.getName());
 

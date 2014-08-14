@@ -160,6 +160,14 @@ public class SnapshotGeneratorFactory {
             throw new UnexpectedLiquibaseException(e);
         }
     }
+    
+    public boolean hasSchemaDiffControlTable(Database database) throws DatabaseException {
+        try {
+            return has(new Table().setName(database.getSchemaDiffControlTableName()).setSchema(new Schema(database.getLiquibaseCatalogName(), database.getLiquibaseSchemaName())), database);
+        } catch (InvalidExampleException e) {
+            throw new UnexpectedLiquibaseException(e);
+        }
+    }
 
     public boolean hasDatabaseChangeLogLockTable(Database database) throws DatabaseException {
         try {

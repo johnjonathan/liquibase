@@ -35,6 +35,8 @@ import liquibase.logging.Logger;
 import liquibase.parser.ChangeLogParser;
 import liquibase.parser.ChangeLogParserFactory;
 import liquibase.resource.ResourceAccessor;
+import liquibase.schemadiff.SchemaDiffControlService;
+import liquibase.schemadiff.SchemaDiffControlServiceFactory;
 import liquibase.serializer.ChangeLogSerializer;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.InvalidExampleException;
@@ -217,7 +219,6 @@ public class Liquibase {
 
         return databaseChangeLog;
     }
-
 
     protected UpdateVisitor createUpdateVisitor() {
         return new UpdateVisitor(database, changeExecListener);
@@ -571,6 +572,7 @@ public class Liquibase {
         lockService.waitForLock();
 
         try {
+            
             DatabaseChangeLog changeLog = getDatabaseChangeLog();
             checkLiquibaseTables(true, changeLog, contexts, labelExpression);
             changeLog.validate(database, contexts, labelExpression);
@@ -587,7 +589,7 @@ public class Liquibase {
             resetServices();
         }
     }
-
+    
     public void markNextChangeSetRan(String contexts, Writer output) throws LiquibaseException {
         markNextChangeSetRan(new Contexts(contexts), new LabelExpression(), output);
     }
@@ -790,6 +792,7 @@ public class Liquibase {
         if (updateExistingNullChecksums) {
             changeLogHistoryService.upgradeChecksums(databaseChangeLog, contexts, labelExpression);
         }
+        SchemaDiffControlServiceFactory.getInstance().getSchemaDiffControlService(getDatabase()).init();
         LockServiceFactory.getInstance().getLockService(getDatabase()).init();
     }
 

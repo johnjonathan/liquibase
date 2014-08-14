@@ -5,7 +5,6 @@ import java.util.List;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.exception.DatabaseException;
-import liquibase.logging.LogFactory;
 
 public class TRChangeLogHistoryService extends StandardChangeLogHistoryService {
 

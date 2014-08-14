@@ -1,12 +1,12 @@
 package liquibase.integration.ant;
 
+import java.io.Writer;
+
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
-import org.apache.tools.ant.AntClassLoader;
-import org.apache.tools.ant.BuildException;
 
-import java.io.Writer;
+import org.apache.tools.ant.BuildException;
 
 public class ChangeLogSyncTask extends BaseLiquibaseTask {
 

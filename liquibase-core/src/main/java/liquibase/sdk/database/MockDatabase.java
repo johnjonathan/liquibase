@@ -37,19 +37,23 @@ import liquibase.structure.core.Schema;
 public class MockDatabase implements Database, InternalDatabase {
 
     private boolean outputDefaultSchema;
-    private boolean outputDefaultCatalog;
-    private boolean supportsCatalogs = true;
-    private boolean supportsSchemas = true;
-    private String defaultCatalogName;
-    private String defaultSchemaName;
-    private boolean caseSensitive;
 
+    private boolean outputDefaultCatalog;
+
+    private boolean supportsCatalogs = true;
+
+    private boolean supportsSchemas = true;
+
+    private String defaultCatalogName;
+
+    private String defaultSchemaName;
+
+    private boolean caseSensitive;
 
     @Override
     public int getPriority() {
         return PRIORITY_DEFAULT;
     }
-
 
     public Schema getSchema() {
         return null;
@@ -73,7 +77,8 @@ public class MockDatabase implements Database, InternalDatabase {
         return null;
     }
 
-    public boolean equals(final DatabaseObject otherObject, final Database accordingTo) {
+    public boolean equals(final DatabaseObject otherObject,
+        final Database accordingTo) {
         return otherObject.getName().equalsIgnoreCase(this.getName());
     }
 
@@ -124,7 +129,6 @@ public class MockDatabase implements Database, InternalDatabase {
         return false;
     }
 
-
     @Override
     public boolean isCaseSensitive() {
         return caseSensitive;
@@ -153,7 +157,6 @@ public class MockDatabase implements Database, InternalDatabase {
     public String getDatabaseProductVersion() throws DatabaseException {
         return null;
     }
-
 
     @Override
     public int getDatabaseMajorVersion() throws DatabaseException {
@@ -193,7 +196,7 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String getDefaultSchemaName()  {
+    public String getDefaultSchemaName() {
         return defaultSchemaName;
     }
 
@@ -227,7 +230,6 @@ public class MockDatabase implements Database, InternalDatabase {
         return isoDate;
     }
 
-
     @Override
     public String getDateLiteral(final java.sql.Date date) {
         return date.toString();
@@ -258,10 +260,9 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String getAutoIncrementClause(final BigInteger startWith, final BigInteger incrementBy) {
-    	return "AUTO_INCREMENT_CLAUSE"
-    			+ startWith != null ? (" " + startWith) : ""
-    		    + incrementBy != null ? (" " + incrementBy) : "";
+    public String getAutoIncrementClause(final BigInteger startWith,
+        final BigInteger incrementBy) {
+        return "AUTO_INCREMENT_CLAUSE" + startWith != null ? (" " + startWith) : "" + incrementBy != null ? (" " + incrementBy) : "";
     }
 
     public SqlStatement getCommitSQL() {
@@ -293,16 +294,32 @@ public class MockDatabase implements Database, InternalDatabase {
     public void setDatabaseChangeLogLockTableName(final String tableName) {
     }
 
-	/**
-	 * Does nothing
-	 *
+    /* (non-Javadoc)
+     * @see liquibase.database.Database#getSchemaDiffControlTableName()
+     */
+    @Override
+    public String getSchemaDiffControlTableName() {
+        return "SCHEMADIFFCONTROL";
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see liquibase.database.Database#setSchemaDiffControlTableName(java.lang.String)
+     */
+    @Override
+    public void setSchemaDiffControlTableName(String tableName) {
+    }
+
+    /**
+     * Does nothing
+     *
      * @see liquibase.database.Database#setDatabaseChangeLogTableName(java.lang.String)
      */
     @Override
     public void setDatabaseChangeLogTableName(final String tableName) {
     }
 
-	@Override
+    @Override
     public String getConcatSql(final String... values) {
         return null;
     }
@@ -331,7 +348,6 @@ public class MockDatabase implements Database, InternalDatabase {
         return false;
     }
 
-
     @Override
     public boolean isSystemObject(final DatabaseObject example) {
         return false;
@@ -348,7 +364,8 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String getViewDefinition(final CatalogAndSchema schema, final String name) throws DatabaseException {
+    public String getViewDefinition(final CatalogAndSchema schema,
+        final String name) throws DatabaseException {
         return null;
     }
 
@@ -362,21 +379,28 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String escapeTableName(final String catalogName, final String schemaName, final String tableName) {
+    public String escapeTableName(final String catalogName,
+        final String schemaName,
+        final String tableName) {
         if (schemaName == null) {
             return tableName;
         } else {
-            return schemaName+"."+tableName;
+            return schemaName + "." + tableName;
         }
     }
 
     @Override
-    public String escapeIndexName(final String catalogName, final String schemaName, final String indexName) {
+    public String escapeIndexName(final String catalogName,
+        final String schemaName,
+        final String indexName) {
         return escapeTableName(catalogName, schemaName, indexName);
     }
 
     @Override
-    public String escapeColumnName(final String catalogName, final String schemaName, final String tableName, final String columnName) {
+    public String escapeColumnName(final String catalogName,
+        final String schemaName,
+        final String tableName,
+        final String columnName) {
         return columnName;
     }
 
@@ -386,11 +410,13 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String escapeSequenceName(final String catalogName, final String schemaName, final String sequenceName) {
+    public String escapeSequenceName(final String catalogName,
+        final String schemaName,
+        final String sequenceName) {
         if (sequenceName == null) {
             return sequenceName;
         } else {
-            return schemaName+"."+sequenceName;
+            return schemaName + "." + sequenceName;
         }
     }
 
@@ -426,11 +452,13 @@ public class MockDatabase implements Database, InternalDatabase {
 
     @Override
     public String generatePrimaryKeyName(final String tableName) {
-        return "PK_"+tableName;
+        return "PK_" + tableName;
     }
 
     @Override
-    public String escapeViewName(final String catalogName, final String schemaName, final String viewName) {
+    public String escapeViewName(final String catalogName,
+        final String schemaName,
+        final String viewName) {
         return escapeTableName(catalogName, schemaName, viewName);
     }
 
@@ -449,7 +477,8 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public void markChangeSetExecStatus(final ChangeSet changeSet, final ChangeSet.ExecType execType) throws DatabaseException {
+    public void markChangeSetExecStatus(final ChangeSet changeSet,
+        final ChangeSet.ExecType execType) throws DatabaseException {
         ;
     }
 
@@ -504,41 +533,53 @@ public class MockDatabase implements Database, InternalDatabase {
 
     @Override
     public boolean isSafeToRunUpdate() throws DatabaseException {
-    	return true;
+        return true;
     }
 
     @Override
-    public String escapeObjectName(final String objectName, final Class<? extends DatabaseObject> objectType) {
+    public String escapeObjectName(final String objectName,
+        final Class<? extends DatabaseObject> objectType) {
         return objectName;
     }
 
     @Override
-    public String escapeObjectName(final String catalogName, final String schemaName, final String objectName, final Class<? extends DatabaseObject> objectType) {
-        return catalogName +"."+schemaName+"."+objectName;
+    public String escapeObjectName(final String catalogName,
+        final String schemaName,
+        final String objectName,
+        final Class<? extends DatabaseObject> objectType) {
+        return catalogName + "." + schemaName + "." + objectName;
     }
 
     @Override
-    public void executeStatements(final Change change, final DatabaseChangeLog changeLog, final List<SqlVisitor> sqlVisitors) throws LiquibaseException {
+    public void executeStatements(final Change change,
+        final DatabaseChangeLog changeLog,
+        final List<SqlVisitor> sqlVisitors) throws LiquibaseException {
         ;
     }
 
     @Override
-    public void execute(final SqlStatement[] statements, final List<SqlVisitor> sqlVisitors) throws LiquibaseException {
+    public void execute(final SqlStatement[] statements,
+        final List<SqlVisitor> sqlVisitors) throws LiquibaseException {
         ;
     }
 
     @Override
-    public void saveStatements(final Change change, final List<SqlVisitor> sqlVisitors, final Writer writer) throws IOException, StatementNotSupportedOnDatabaseException, LiquibaseException {
+    public void saveStatements(final Change change,
+        final List<SqlVisitor> sqlVisitors,
+        final Writer writer) throws IOException, StatementNotSupportedOnDatabaseException, LiquibaseException {
         ;
     }
 
     @Override
-    public void executeRollbackStatements(final Change change, final List<SqlVisitor> sqlVisitors) throws LiquibaseException, RollbackImpossibleException {
+    public void executeRollbackStatements(final Change change,
+        final List<SqlVisitor> sqlVisitors) throws LiquibaseException, RollbackImpossibleException {
         ;
     }
 
     @Override
-    public void saveRollbackStatement(final Change change, final List<SqlVisitor> sqlVisitors, final Writer writer) throws IOException, RollbackImpossibleException, StatementNotSupportedOnDatabaseException, LiquibaseException {
+    public void saveRollbackStatement(final Change change,
+        final List<SqlVisitor> sqlVisitors,
+        final Writer writer) throws IOException, RollbackImpossibleException, StatementNotSupportedOnDatabaseException, LiquibaseException {
         ;
     }
 
@@ -553,9 +594,9 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public String getLiquibaseSchemaName(){
-		return null;
-	}
+    public String getLiquibaseSchemaName() {
+        return null;
+    }
 
     @Override
     public void setLiquibaseSchemaName(final String schemaName) {
@@ -577,18 +618,18 @@ public class MockDatabase implements Database, InternalDatabase {
         return new Date();
     }
 
-	@Override
+    @Override
     public List<DatabaseFunction> getDateFunctions() {
-		return null;
-	}
+        return null;
+    }
 
     @Override
     public void resetInternalState() {
 
     }
 
-        @Override
-        public boolean supportsForeignKeyDisable() {
+    @Override
+    public boolean supportsForeignKeyDisable() {
         return false;
     }
 
@@ -620,16 +661,19 @@ public class MockDatabase implements Database, InternalDatabase {
     /**
      * Returns name all lower case except for the last letter capital for easier detection of corrected names.
      */
-    public String correctObjectName(final String name, final Class<? extends DatabaseObject> objectType) {
+    public String correctObjectName(final String name,
+        final Class<? extends DatabaseObject> objectType) {
         if (name == null) {
             return null;
         }
         String finalName = name.toLowerCase();
-        finalName = finalName.substring(0, finalName.length()-1)+finalName.substring(finalName.length()-1, finalName.length()).toUpperCase();
+        finalName = finalName.substring(0, finalName.length() - 1) + finalName.substring(finalName.length() - 1, finalName.length()).toUpperCase();
         return finalName;
     }
 
-    public String correctObjectName(final String name, final Class<? extends DatabaseObject> objectType, final boolean quoteCorrectedName) {
+    public String correctObjectName(final String name,
+        final Class<? extends DatabaseObject> objectType,
+        final boolean quoteCorrectedName) {
         return correctObjectName(name, objectType);
     }
 
@@ -646,7 +690,8 @@ public class MockDatabase implements Database, InternalDatabase {
         return 2;
     }
 
-    public CatalogAndSchema getSchemaFromJdbcInfo(final String rawCatalogName, final String rawSchemaName) {
+    public CatalogAndSchema getSchemaFromJdbcInfo(final String rawCatalogName,
+        final String rawSchemaName) {
         return new CatalogAndSchema(rawCatalogName, rawSchemaName);
     }
 
@@ -695,17 +740,15 @@ public class MockDatabase implements Database, InternalDatabase {
         return false;
     }
 
-
-	@Override
+    @Override
     public void setOutputDefaultSchema(final boolean outputDefaultSchema) {
-		this.outputDefaultSchema = outputDefaultSchema;
-	}
+        this.outputDefaultSchema = outputDefaultSchema;
+    }
 
-
-	@Override
+    @Override
     public boolean getOutputDefaultSchema() {
-		return outputDefaultSchema;
-	}
+        return outputDefaultSchema;
+    }
 
     @Override
     public boolean getOutputDefaultCatalog() {
@@ -718,7 +761,8 @@ public class MockDatabase implements Database, InternalDatabase {
     }
 
     @Override
-    public boolean isDefaultSchema(final String catalog, final String schema) {
+    public boolean isDefaultSchema(final String catalog,
+        final String schema) {
         return false;
     }
 
@@ -732,11 +776,10 @@ public class MockDatabase implements Database, InternalDatabase {
         return true;
     }
 
-
-	@Override
-	public String getSystemSchema() {
-		return "information_schema";
-	}
+    @Override
+    public String getSystemSchema() {
+        return "information_schema";
+    }
 
     @Override
     public void addReservedWords(Collection<String> words) {

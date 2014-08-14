@@ -58,7 +58,7 @@ public abstract class AbstractChangeLogHistoryService implements ChangeLogHistor
             }
         }
     }
-
+    
     public void upgradeChecksums(final DatabaseChangeLog databaseChangeLog, final Contexts contexts, LabelExpression labels) throws DatabaseException {
         for (RanChangeSet ranChangeSet : this.getRanChangeSets()) {
             if (ranChangeSet.getLastCheckSum() == null) {
@@ -66,13 +66,8 @@ public abstract class AbstractChangeLogHistoryService implements ChangeLogHistor
                 if (changeSet != null && new ContextChangeSetFilter(contexts).accepts(changeSet).isAccepted() && new DbmsChangeSetFilter(getDatabase()).accepts(changeSet).isAccepted()) {
                     LogFactory.getInstance().getLog().debug("Updating null or out of date checksum on changeSet " + changeSet + " to correct value");
                     replaceChecksum(changeSet);
-                }else{
-                    LogFactory.getInstance().getLog().info("Not accepted " + changeSet.toString());
                 }
-            }else{
-                LogFactory.getInstance().getLog().info("RanChangeSet NotNull " + ranChangeSet.getChangeLog());
             }
-                
         }
     }
 

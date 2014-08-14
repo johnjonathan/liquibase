@@ -7,6 +7,7 @@ public class GlobalConfiguration extends AbstractConfigurationContainer {
 
     public static final String SHOULD_RUN = "shouldRun";
     public static final String DATABASECHANGELOG_TABLE_NAME = "databaseChangeLogTableName";
+    public static final String SCHEMADIFFCONTROL_TABLE_NAME = "schemDiffControlTableName";
     public static final String DATABASECHANGELOGLOCK_TABLE_NAME = "databaseChangeLogLockTableName";
     public static final String LIQUIBASE_TABLESPACE_NAME = "tablespaceName";
     public static final String LIQUIBASE_CATALOG_NAME = "catalogName";
@@ -27,6 +28,10 @@ public class GlobalConfiguration extends AbstractConfigurationContainer {
         getContainer().addProperty(DATABASECHANGELOG_TABLE_NAME, String.class)
                 .setDescription("Name of table to use for tracking change history")
                 .setDefaultValue("DATABASECHANGELOG");
+        
+        getContainer().addProperty(SCHEMADIFFCONTROL_TABLE_NAME, String.class)
+        .setDescription("Name of table to use for tracking schema patches")
+        .setDefaultValue("SCHEMADIFFCONTROL");
 
         getContainer().addProperty(DATABASECHANGELOGLOCK_TABLE_NAME, String.class)
                 .setDescription("Name of table to use for tracking concurrent liquibase usage")
@@ -76,6 +81,10 @@ public class GlobalConfiguration extends AbstractConfigurationContainer {
      */
     public String getDatabaseChangeLogTableName() {
         return getContainer().getValue(DATABASECHANGELOG_TABLE_NAME, String.class);
+    }
+    
+    public String getSchemDiffControlTableName() {
+        return getContainer().getValue(SCHEMADIFFCONTROL_TABLE_NAME, String.class);
     }
 
     public GlobalConfiguration setDatabaseChangeLogTableName(String name) {
